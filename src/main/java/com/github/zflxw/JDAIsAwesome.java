@@ -23,6 +23,8 @@ public final class JDAIsAwesome {
     public final String PREFIX = ">";
     public final String BOT_ID = "732189708305563680";
 
+    private static final String VERSION = "1.0.1";
+
     private ShardManager shardManager;
     private CommandManager commandManager;
     private SQLite sqlite;
@@ -42,7 +44,7 @@ public final class JDAIsAwesome {
         DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder();
 
         builder.setToken(Secrets.TOKEN);
-        builder.setActivity(Activity.watching("JDA 4 THE WIN!"));
+        builder.setActivity(Activity.watching("v"+VERSION));
         builder.setStatus(OnlineStatus.ONLINE);
 
         builder.addEventListeners(new MessageListener());

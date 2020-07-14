@@ -21,7 +21,7 @@ public class MessageListener extends ListenerAdapter {
             String rawMessage = message.getContentRaw();
             String messageString = event.getMessage().getContentDisplay();
 
-            // Frage ab, ob die Nachricht
+            // v1.0.1 -
             checkMessage(bot, member, channel, message, rawMessage);
 
             // Hier wird abgefragt, ob die Nachricht mit dem voreingestellten Prefix startet. Dieser ist in einem public String in der Hauptklasse gespeichert und wird über die Instanz aufgerufen
@@ -45,11 +45,13 @@ public class MessageListener extends ListenerAdapter {
         }
     }
 
+    // v1.0.1 - Ein weiteres Parameter brauchen wir hier nicht zu übergeben, da wir die Guilde über den Member bekommen können
     private void checkMessage(User bot, Member member, MessageChannel channel, Message message, String rawMessage) {
+        long guildID = member.getGuild().getIdLong();
         // Frage ab, ob der Member nicht der Bot selbst ist und der Member kein Administrator ist (auch hier kann natürlich jede Permission genommen werden)
         if (member.getUser() != bot && !member.hasPermission(Permission.ADMINISTRATOR)) {
-            // Gehe durch alle blacklisted Words
-            for (String word : JDAIsAwesome.getInstance().getSQLManager().getBlacklistedWords()) {
+            // v1.0.1 - Hier müssen wir jetzt noch die guildID mit übergeben
+            for (String word : JDAIsAwesome.getInstance().getSQLManager().getBlacklistedWords(guildID)) {
                 // Frage ab, ob die Nachricht das aktuelle Wort beinhaltet
                 if (rawMessage.toLowerCase().contains(word.toLowerCase())) {
                     // Lösche die Nachricht
