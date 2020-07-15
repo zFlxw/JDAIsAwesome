@@ -17,6 +17,7 @@ public class SQLManager {
          * v1.0.1 - Hinzufügen der Guild Abhängigkeit / Keine globale Blacklist
          */
         sqlite.update("CREATE TABLE IF NOT EXISTS Blacklist (WORD VARCHAR(100) NOT NULL, GUILD_ID VARCHAR(100) NOT NULL);");
+        sqlite.update("CREATE TABLE IF NOT EXISTS Prefixes (PREFIX VARCHAR(10), GUILD_ID VARCHAR(100));");
     }
 
     /* v1.0.0 - Hinzufügen der Methode addBlacklistWords
@@ -44,6 +45,55 @@ public class SQLManager {
             if (getBlacklistedWords(guildID).contains(word))
                 sqlite.update("DELETE FROM Blacklist WHERE WORD='"+word+"';");
         }
+    }
+
+    // Als Parameter brauchen wir hier die ID der Guilde
+    public boolean isPrefixSet(long guildID) {
+        // Erstelle ein neues ResultSet. Hier werden alle Results gespeichert, die der ID der Guilde entsprechen, die angegeben wurde
+        ResultSet resultSet = sqlite.getQuery("SELECT * FROM Prefixes WHERE GUILD_ID="+guildID+";");
+        try {
+            // Hier wird abgefragt, ob es einen Eintrag gibt
+            if (resultSet.next()) {
+                // Falls es einen Prefix gibt, wird true zurückgegeben
+                return true;
+            }
+            // Das ResultSet wird geschlossen
+            resultSet.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        // Falls kein Prefix gefunden wurde, wird false zurückgegeben
+        return false;
+    }
+
+    // Als Parameter brauchen wir die ID der Guilde
+    public String getPrefix(long guildID) {
+        // Erstelle ein neues ResultSet. Hier werden alle Results gespeichert, die der ID der Guilde entsprechen, die angegeben wurde
+        ResultSet resultSet = sqlite.getQuery("SELECT * FROM Prefixes WHERE GUILD_ID="+guildID+";");
+        try {
+            // Hier wird abgefragt, ob es einen Eintrag gibt
+            if (resultSet.next()) {
+                // Hier wird der Eintrag zurückgegeben, sonfern es einen gibt
+                return resultSet.getString("PREFIX");
+            }
+            // Das ResultSet wird geschlossen
+            resultSet.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        // Falls kein Prefix gefunden wurde, wird der Standard Prefix des Bots zurückgegeben.
+        return JDAIsAwesome.getInstance().DEFAULT_PREFIX;
+    }
+
+    // Als Parameter werden der Prefix und die ID der Guilde übergeben
+    public void setPrefix(String prefix, long guildID) {
+        // Frage ab, ob bereits ein custom Prefix gesetzt ist
+        if (isPrefixSet(guildID))
+            // Wenn einer gesetzt ist, wird dieser aktualisiert
+            sqlite.update("UPDATE Prefixes SET PREFIX='"+prefix+"' WHERE GUILD_ID="+guildID+";");
+        else
+            // Wenn keiner gesetzt ist, wird ein neuer eingetragem
+            sqlite.update("INSERT INTO Prefixes (PREFIX, GUILD_ID) VALUES ('"+prefix+"',"+guildID+");");
     }
 
     /* v1.0.0 - Diese Methode gibt alle Wörter auf der Blacklist in einem HashSet zurück. (Ein HashSet ist eine Collection in der ein Wert nicht zweimal vorkommen kann, was bei uns der Fall ist)

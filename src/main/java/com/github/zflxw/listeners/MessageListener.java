@@ -24,19 +24,19 @@ public class MessageListener extends ListenerAdapter {
             // v1.0.1 -
             checkMessage(bot, member, channel, message, rawMessage);
 
-            // Hier wird abgefragt, ob die Nachricht mit dem voreingestellten Prefix startet. Dieser ist in einem public String in der Hauptklasse gespeichert und wird über die Instanz aufgerufen
-            if (messageString.startsWith(JDAIsAwesome.getInstance().PREFIX)) {
-                // Hier wird der Prefix abgeschnitten. Dazu habe ich hier fest die 1 eingetragen, kann aber auch mit JDAIsAwesome.getInstance().PREFIX.length(); dort eingetragen werden.
-                // Außerdem wird alles was nach dem ersten Leerzeichen geschrieben wird abgeschnitten
-                String command = messageString.substring(1).split(" ")[0];
-                // Hier werden alle Argumente die nach dem Command kommen in einem Array gespeichert
-                String[] args = messageString.substring(command.length() + 1).split(" ");
-
+            // Hier den aktuellen Prefix aus der Datenbank rausspeichern
+            String prefix = JDAIsAwesome.getInstance().getSQLManager().getPrefix(member.getGuild().getIdLong());
+            // Frage ab, ob die Nachricht mit dem Prefix aus der Datenbank startet
+            if (messageString.startsWith(prefix)) {
+                //  Hier speicherst du jetzt nur den Command raus (also alles nach dem Prefix und vor dem ersten Leerzeichen)
+                String command = messageString.substring(prefix.length()).split(" ")[0];
+                // Speichere hier die Argumente (Alles nach Prefix und Command, wird bei einem leerzeichen in das Array geschrieben)
+                String[] args = messageString.substring((command.length() + prefix.length() + 1)).split(" ");
                 // Hier wird abgefragt, ob der Command auch Argumente hat
                 if (args.length > 0) {
                     // Hier werden direkt zwei Sachen gemacht. Erstens wird die Methode ausgeführt und dabei wird dann abgefragt, ob es diesen Command gibt.
                     // Wenn ja, dann wird dieser ausgeführt, wenn nicht, kommt die Nachricht di im if steht
-                    if (!JDAIsAwesome.getInstance().getCommandManager().perform(command, member, channel, message)) {
+                    if (!JDAIsAwesome.getInstance().getCommandManager().perform(command, member, channel, message, args)) {
                         // Diese Nachricht wird gesendet, wenn der Befehl invalide ist.
                         channel.sendMessage("*Dieser Befehl konnte nicht gefunden werden*").queue();
                     }

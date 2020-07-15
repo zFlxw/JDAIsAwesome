@@ -11,15 +11,13 @@ import java.util.Set;
 
 public class BlacklistCommand implements ServerCommand {
     @Override
-    public void performCommand(Member member, MessageChannel channel, Message message) {
+    public void performCommand(Member member, MessageChannel channel, Message message, String[] args) {
         // Frage ab, ob der Member Administratorrechte hat.
         if (member.hasPermission(Permission.ADMINISTRATOR)) {
             // speichere die ID der Guilde raus
             long guildID = member.getGuild().getIdLong();
             // Frage ab, ob der Member nicht der Bot selbst ist
             if (member.getUser() != member.getJDA().getSelfUser()) {
-                // >blacklist <add/remove> <word> - Den Befehl zur übersicht mit aufgeschrieben
-                String[] args = message.getContentRaw().substring(">blacklist ".length()).split(" ");
                 // Frage ab, ob es zwei Argumente oder mehr gibt
                 if (args.length >= 2) {
 

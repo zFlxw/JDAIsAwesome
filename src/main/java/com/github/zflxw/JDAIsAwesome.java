@@ -20,10 +20,10 @@ public final class JDAIsAwesome {
 
     public static JDAIsAwesome instance;
 
-    public final String PREFIX = ">";
+    public final String DEFAULT_PREFIX = ">";
     public final String BOT_ID = "732189708305563680";
 
-    private static final String VERSION = "1.0.1";
+    private static final String VERSION = "1.0.2";
 
     private ShardManager shardManager;
     private CommandManager commandManager;

@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 public class SayCommand implements ServerCommand {
     // Methode zum ausführen des Befehls
     @Override
-    public void performCommand(Member member, MessageChannel channel, Message message) {
+    public void performCommand(Member member, MessageChannel channel, Message message, String[] args) {
         // Hier wird abgefragt, ob der Member der den Befehl gesendet hat, die Rechte dazu hat, Nachrichten zu verwalten. Hier könnt ihr natürlich wählen, was ihr möchtet
         if (member.hasPermission(Permission.MESSAGE_MANAGE)) {
             // Hier wird abgefragt, ob der Member nicht der Bot selber ist (um Fehler zu vermeiden). Dazu habe ich die BotID als String in der Main gespeichert.
