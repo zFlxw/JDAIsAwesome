@@ -3,6 +3,7 @@ package com.github.zflxw.commands;
 import com.github.zflxw.JDAIsAwesome;
 import com.github.zflxw.commands.types.ServerCommand;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;

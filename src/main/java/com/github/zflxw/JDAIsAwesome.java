@@ -6,6 +6,7 @@ import com.github.zflxw.sql.SQLManager;
 import com.github.zflxw.sql.SQLite;
 import com.github.zflxw.util.Secrets;
 import com.github.zflxw.util.Utilities;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -15,6 +16,9 @@ import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public final class JDAIsAwesome {
 
